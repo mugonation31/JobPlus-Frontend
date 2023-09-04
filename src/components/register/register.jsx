@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../styles/form.scss";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function register() {
   const [firstName, setFirstName] = useState("");
@@ -9,15 +10,29 @@ export default function register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(firstName, lastName, email, password, confirmPassword);
 
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
+    try {
+      await axios.post("http://localhost:1337/auth/local/register", {
+        data: {
+          firstName: firstName,
+          lastName: lastName,
+          username: username,
+          email: email,
+          password: password,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching data", error);
+
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+    }
   };
 
   return (
