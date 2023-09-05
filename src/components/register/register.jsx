@@ -12,14 +12,22 @@ export default function register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(firstName, lastName, email, password, confirmPassword);
+
+    const data = {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+    };
+
+    console.log(data);
 
     try {
       await axios.post("http://localhost:1337/auth/local/register", {
         data: {
           firstName: firstName,
           lastName: lastName,
-          username: username,
           email: email,
           password: password,
         },
@@ -74,7 +82,7 @@ export default function register() {
         <label className="form__label">Choose password</label>
         <input
           className="form__field"
-          type="text"
+          type="password"
           placeholder="Choose password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -85,7 +93,7 @@ export default function register() {
         <label className="form__label">Confirm Password</label>
         <input
           className="form__field"
-          type="text"
+          type="password"
           placeholder="Confirm Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
