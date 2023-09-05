@@ -17,6 +17,7 @@ export default function register() {
       firstName,
       lastName,
       email,
+      username: email,
       password,
       confirmPassword,
     };
@@ -24,22 +25,20 @@ export default function register() {
     console.log(data);
 
     try {
-      await axios.post("http://localhost:1337/auth/local/register", {
-        data: {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: password,
-        },
-      });
-    } catch (error) {
-      console.error("Error fetching data", error);
-
+      const res = await axios.post(
+        "http://localhost:1337/api/auth/local/register",
+        data
+      );
+      //Reset our state
       setFirstName("");
       setLastName("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+
+      console.log(res);
+    } catch (err) {
+      console.log(err.response.data.error.message);
     }
   };
 
