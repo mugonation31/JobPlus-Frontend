@@ -14,4 +14,19 @@ export const parseErrors = (err) => {
       details: [],
     };
   }
+
+  //check if error is a forbidden error
+  if (err?.response?.status === 403) {
+    return {
+      message: "Your role does not have access to this resource",
+      details: [],
+    };
+  }
+
+  //check for generic errors 
+   return {
+     message: "An expected error occurred, contact support",
+     details: [],
+   };
+
 };
