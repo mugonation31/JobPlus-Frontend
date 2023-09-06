@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../styles/form.scss";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { parseErrors } from "../../utils/parseErrors";
 
 export default function register() {
   const [firstName, setFirstName] = useState("");
@@ -29,6 +30,7 @@ export default function register() {
         "http://localhost:1337/api/auth/local/register",
         data
       );
+
       //Reset our state
       setFirstName("");
       setLastName("");
@@ -38,7 +40,8 @@ export default function register() {
 
       console.log(res);
     } catch (err) {
-      console.log(err.response.data.error.message);
+      console.log(parseErrors(err));
+      // console.log(err);
     }
   };
 
