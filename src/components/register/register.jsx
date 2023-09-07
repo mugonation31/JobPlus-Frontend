@@ -15,17 +15,21 @@ export default function register() {
   //error messages
   const [alert, setAlert] = useState({});
 
+  const validateConfirmPassword = (password, confirmPassword) => {
+    if (password !== confirmPassword) {
+      setAlert({
+        message: "password and confirm password do not match",
+      });
+      return false; //exit early
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     //check if password and confirm password match
-    if (password !== confirmPassword) {
-      setAlert({
-        message: "password and confirm password do not match",
-        details: [],
-      });
-      return; //exit early
-    }
+    if (!validateConfirmPassword) return false;
 
     const data = {
       firstName,
@@ -39,20 +43,19 @@ export default function register() {
     console.log(data);
 
     try {
-      const res = await axios.post(
-        "http://localhost:1337/api/auth/local/register",
-        data
-      );
+      await axios.post("http://localhost:1337/api/auth/local/register", data);
 
       //Reset our state
       setFirstName("");
       setLastName("");
       setEmail("");
       setPassword("");
-      setAlert({});
+      setAlert({
+        message: "Account created successfully",
+        details: [],
+        type: "success",
+      });
       setConfirmPassword("");
-
-      console.log(res);
     } catch (err) {
       setAlert(parseErrors(err));
     }
@@ -60,7 +63,7 @@ export default function register() {
 
   return (
     <>
-      <Alert type="error" data={alert} />
+      <Alert data={alert} />
 
       <form className="form form--page" onSubmit={handleSubmit}>
         <div className="form__group form__group--page">

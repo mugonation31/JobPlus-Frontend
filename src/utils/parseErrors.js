@@ -23,10 +23,9 @@ export const parseErrors = (err) => {
     };
   }
 
-  //check for generic errors 
-   return {
-     message: "An expected error occurred, contact support",
-     details: [],
-   };
-
+  //check for generic errors
+  return {
+    message: "An expected error occurred, contact support",
+    details: [],
+  };
 };
