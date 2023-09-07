@@ -3,6 +3,7 @@ import "../styles/form.scss";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { parseErrors } from "../../utils/parseErrors";
+import Alert from "../alert/alert";
 
 export default function register() {
   const [firstName, setFirstName] = useState("");
@@ -11,8 +12,20 @@ export default function register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  //error messages
+  const [alert, setAlert] = useState({});
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    //check if password and confirm password match
+    if (password !== confirmPassword) {
+      setAlert({
+        message: "password and confirm password do not match",
+        details: [],
+      });
+      return; //exit early
+    }
 
     const data = {
       firstName,
@@ -27,7 +40,7 @@ export default function register() {
 
     try {
       const res = await axios.post(
-        "http://localhost:1337/api/auth/local/registerrr",
+        "http://localhost:1337/api/auth/local/register",
         data
       );
 
@@ -36,79 +49,83 @@ export default function register() {
       setLastName("");
       setEmail("");
       setPassword("");
+      setAlert({});
       setConfirmPassword("");
 
       console.log(res);
     } catch (err) {
-      console.log(parseErrors(err));
-      // console.log(err);
+      setAlert(parseErrors(err));
     }
   };
 
   return (
-    <form className="form form--page" onSubmit={handleSubmit}>
-      <div className="form__group form__group--page">
-        <label className="form__label">First name</label>
-        <input
-          className="form__field"
-          type="text"
-          placeholder="First name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-      </div>
+    <>
+      <Alert type="error" data={alert} />
 
-      <div className="form__group form__group--page">
-        <label className="form__label">Last name</label>
-        <input
-          className="form__field"
-          type="text"
-          placeholder="Last name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
-      </div>
+      <form className="form form--page" onSubmit={handleSubmit}>
+        <div className="form__group form__group--page">
+          <label className="form__label">First name</label>
+          <input
+            className="form__field"
+            type="text"
+            placeholder="First name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+        </div>
 
-      <div className="form__group form__group--page">
-        <label className="form__label">Email</label>
-        <input
-          className="form__field"
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
+        <div className="form__group form__group--page">
+          <label className="form__label">Last name</label>
+          <input
+            className="form__field"
+            type="text"
+            placeholder="Last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+        </div>
 
-      <div className="form__group form__group--page">
-        <label className="form__label">Choose password</label>
-        <input
-          className="form__field"
-          type="password"
-          placeholder="Choose password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
+        <div className="form__group form__group--page">
+          <label className="form__label">Email</label>
+          <input
+            className="form__field"
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-      <div className="form__group form__group--page">
-        <label className="form__label">Confirm Password</label>
-        <input
-          className="form__field"
-          type="password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-      </div>
+        <div className="form__group form__group--page">
+          <label className="form__label">Choose password</label>
+          <input
+            className="form__field"
+            type="password"
+            placeholder="Choose password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
-      <div className="form__group form__group--page">
-        <input className="form__btn" type="submit" value="Register" />
-      </div>
+        <div className="form__group form__group--page">
+          <label className="form__label">Confirm Password</label>
+          <input
+            className="form__field"
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </div>
 
-      <footer>
-        Already have an account? <Link to="/login">Login</Link>
-      </footer>
-    </form>
+        <div className="form__group form__group--page">
+          <input className="form__btn" type="submit" value="Register" />
+        </div>
+
+        <footer>
+          Already have an account? <Link to="/login">Login</Link>
+        </footer>
+      </form>
+    </>
   );
 }
