@@ -25,11 +25,20 @@ export default function register() {
     return true;
   };
 
+  const resetState = () => {
+    //Reset our state
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     //check if password and confirm password match
-    if (!validateConfirmPassword) return false;
+    if (!validateConfirmPassword(password, confirmPassword)) return false;
 
     const data = {
       firstName,
@@ -45,11 +54,8 @@ export default function register() {
     try {
       await axios.post("http://localhost:1337/api/auth/local/register", data);
 
-      //Reset our state
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setPassword("");
+      resetState();
+
       setAlert({
         message: "Account created successfully",
         details: [],
