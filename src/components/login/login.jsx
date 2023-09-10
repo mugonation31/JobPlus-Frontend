@@ -4,21 +4,31 @@ import "../styles/form.scss";
 import axios from "axios";
 
 export default function login() {
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
+
+  const resetState = () => {
+    setIdentifier("");
+    setPassword("");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
 
     const data = {
-      email,
+      identifier,
       password,
-      username: email,
     };
 
-    setEmail("");
-    setPassword("");
+    console.log(data);
+
+    try {
+      await axios.post("http://localhost:1337/api/auth/local", data);
+
+      resetState();
+    } catch (error) {
+      console.error("error fetching data", error);
+    }
   };
 
   return (
@@ -29,8 +39,8 @@ export default function login() {
           className="form__field"
           type="text"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={identifier}
+          onChange={(e) => setIdentifier(e.target.value)}
         />
       </div>
 
@@ -38,7 +48,7 @@ export default function login() {
         <label className="form__label">Password</label>
         <input
           className="form__field"
-          type="text"
+          type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}

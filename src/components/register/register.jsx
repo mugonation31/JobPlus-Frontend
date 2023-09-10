@@ -61,7 +61,6 @@ export default function register() {
         details: [],
         type: "success",
       });
-      setConfirmPassword("");
     } catch (err) {
       setAlert(parseErrors(err));
     }
