@@ -36,7 +36,6 @@ export default function login() {
 
       setAlert({
         message: "Login successful",
-        details: [],
         type: "success",
       });
     } catch (err) {
@@ -76,7 +75,8 @@ export default function login() {
         </div>
 
         <footer>
-          Dont have an account? <Link to="/register">Register</Link>
+          Don't have an account? <Link to="/register">Register</Link> or Forgot
+          password? <Link to="reset password"> Reset Password</Link>
         </footer>
       </form>
     </>
