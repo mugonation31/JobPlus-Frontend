@@ -14,6 +14,9 @@ export default function reset_password() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const searchParams = new URLSearchParams(location.search);
+  const code = searchParams.get("code");
+
   const resetState = () => {
     setPassword("");
     setPasswordConfirmation("");
@@ -25,6 +28,7 @@ export default function reset_password() {
     const data = {
       password,
       passwordConfirmation,
+      code,
     };
 
     try {
