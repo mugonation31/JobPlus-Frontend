@@ -1,41 +1,34 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { Link } from "react-router-dom";
 import "../styles/form.scss";
 import axios from "axios";
 import Alert from "../alert/alert";
 import { parseErrors } from "../../utils/parseErrors";
 
-export default function login() {
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
+export default function forgot_password() {
+  const [email, setEmail] = useState("");
 
   const [alert, setAlert] = useState("");
 
-  const navigate = useNavigate();
-
   const resetState = () => {
-    setIdentifier("");
-    setPassword("");
+    setEmail("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const data = {
-      identifier,
-      password,
+      email,
     };
 
     try {
-      await axios.post("http://localhost:1337/api/auth/local", data);
+      await axios.post("http://localhost:1337/api/auth/forgot-password", data);
 
       resetState();
 
-      navigate("/");
-
       setAlert({
-        message: "Login successful",
+        message: "Please check you email for further instructions",
         type: "success",
       });
     } catch (err) {
@@ -54,19 +47,8 @@ export default function login() {
             className="form__field"
             type="text"
             placeholder="Email"
-            value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-          />
-        </div>
-
-        <div className="form__group form__group--page">
-          <label className="form__label">Password</label>
-          <input
-            className="form__field"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
@@ -75,8 +57,7 @@ export default function login() {
         </div>
 
         <footer>
-          Don't have an account? <Link to="/register">Register</Link> or
-          <Link to="/forgot-password"> Forgot Password</Link>
+          Already have an account? <Link to="/login">Login</Link>
         </footer>
       </form>
     </>

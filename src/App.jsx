@@ -1,14 +1,15 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import ApplicationPage from './pages/ApplicationPage';
-import ApplyPage from './pages/ApplyPage';
-import ListingsPage from './pages/ListingsPage';
-import NotificationPage from './pages/NotificationPage';
-import LoginPage from './pages/LoginPage';
-import ProfilePage from './pages/ProfilePage';
-import RegisterPage from './pages/RegisterPage';
-import SavedJobPage from './pages/SavedJobPage';
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import ApplicationPage from "./pages/ApplicationPage";
+import ApplyPage from "./pages/ApplyPage";
+import ListingsPage from "./pages/ListingsPage";
+import NotificationPage from "./pages/NotificationPage";
+import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/ProfilePage";
+import RegisterPage from "./pages/RegisterPage";
+import SavedJobPage from "./pages/SavedJobPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/saved-jobs" element={<SavedJobPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
     </Routes>
   );
 }
