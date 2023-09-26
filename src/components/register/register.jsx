@@ -1,9 +1,8 @@
 import { useState } from "react";
 import "../styles/form.scss";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { parseErrors } from "../../utils/parseErrors";
 import Alert from "../alert/alert";
+import { useApi } from "../../hooks/useApi";
 
 export default function register() {
   const [firstName, setFirstName] = useState("");
@@ -14,6 +13,7 @@ export default function register() {
 
   //error messages
   const [alert, setAlert] = useState({});
+  const { post } = useApi();
 
   const validateConfirmPassword = (password, confirmPassword) => {
     if (password !== confirmPassword) {
@@ -25,13 +25,19 @@ export default function register() {
     return true;
   };
 
-  const resetState = () => {
+  const handleSuccess = () => {
     //Reset our state
     setFirstName("");
     setLastName("");
     setEmail("");
     setPassword("");
     setConfirmPassword("");
+
+    setAlert({
+      message: "Account created successfully",
+      details: [],
+      type: "success",
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -49,21 +55,12 @@ export default function register() {
       confirmPassword,
     };
 
-    console.log(data);
-
-    try {
-      await axios.post("http://localhost:1337/api/auth/local/register", data);
-
-      resetState();
-
-      setAlert({
-        message: "Account created successfully",
-        details: [],
-        type: "success",
-      });
-    } catch (err) {
-      setAlert(parseErrors(err));
-    }
+    await post("auth/local/register", {
+      data: data,
+      onSuccess: (res) => handleSuccess(),
+      onFailure: (err) => setAlert(err),
+    });
+    console.log("error", err);
   };
 
   return (

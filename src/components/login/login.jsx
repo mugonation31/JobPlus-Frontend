@@ -2,45 +2,36 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "../styles/form.scss";
-import axios from "axios";
 import Alert from "../alert/alert";
-import { parseErrors } from "../../utils/parseErrors";
+
+import { useApi } from "../../hooks/useApi";
 
 export default function login() {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
-
   const [alert, setAlert] = useState("");
 
   const navigate = useNavigate();
+  const { post } = useApi();
 
-  const resetState = () => {
+  const handleSuccess = () => {
+    // reset our state
     setIdentifier("");
     setPassword("");
+
+    // Navigate to home page
+    navigate("/");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = {
-      identifier,
-      password,
-    };
-
-    try {
-      await axios.post("http://localhost:1337/api/auth/local", data);
-
-      resetState();
-
-      navigate("/");
-
-      setAlert({
-        message: "Login successful",
-        type: "success",
-      });
-    } catch (err) {
-      setAlert(parseErrors(err));
-    }
+    await post("auth/local", {
+      data: { identifier, password },
+      onSuccess: (res) => handleSuccess(),
+      onFailure: (err) => setAlert(err),
+    });
+    console.log("error", err);
   };
 
   return (
