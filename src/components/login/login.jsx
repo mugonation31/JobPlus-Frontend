@@ -26,7 +26,7 @@ export default function login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await post("api/auth/local", {
+    await post("auth/local", {
       data: { identifier, password },
       onSuccess: (res) => handleSuccess(),
       onFailure: (err) => setAlert(err),

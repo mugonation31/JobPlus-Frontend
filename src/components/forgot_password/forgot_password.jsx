@@ -13,6 +13,11 @@ export default function forgot_password() {
 
   const handleSuccess = () => {
     setEmail("");
+
+    setAlert({
+      type: "success",
+      message: "Please check your email for further instructions",
+    });
   };
 
   const handleSubmit = async (e) => {
