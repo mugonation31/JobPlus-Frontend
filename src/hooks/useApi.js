@@ -6,14 +6,15 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export const useApi = () => {
   const request = async (endpoint, options = {}) => {
     try {
-      await axios({
+      const res = await axios({
         method: options.method,
-        endpoint: `${BACKEND_URL}/${endpoint}`,
+        url: `${BACKEND_URL}/${endpoint}`,
         data: options.data || {},
         params: options.params || {},
       });
       options.onSuccess && options.onSuccess(res);
     } catch (err) {
+      console.log("err:", err);
       options.onFailure && options.onFailure(parseErrors(err));
     }
   };
