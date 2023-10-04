@@ -5,6 +5,7 @@ import "../styles/form.scss";
 import Alert from "../alert/alert";
 import cookie from "js-cookie";
 import { useApi } from "../../hooks/useApi";
+import { useCookie } from "../../hooks/useCookie";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function login() {
@@ -13,13 +14,14 @@ export default function login() {
   const [alert, setAlert] = useState("");
 
   const { setIsAuthenticated } = useAuth();
+  const { saveAuthCookie, getAuthCookie } = useCookie();
 
   const navigate = useNavigate();
   const { post } = useApi();
 
   const handleSuccess = (res) => {
     // set the jwt in a cookie
-    cookie.set("jobplus-token", res.data.jwt, { expires: 4 / 24 }); //expires in 4 hours
+    saveAuthCookie(res.data.jwt); //expires in 4 hours
     // reset our state
     setIdentifier("");
     setPassword("");
@@ -66,7 +68,7 @@ export default function login() {
           />
         </div>
 
-        <div className="form__group form__group--page">
+        <div className="form__group form__group--page" onClick={getAuthCookie}>
           <input className="form__btn" type="submit" value="Login" />
         </div>
 
