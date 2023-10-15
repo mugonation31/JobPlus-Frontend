@@ -14,7 +14,7 @@ export default function login() {
   const [alert, setAlert] = useState("");
 
   const { setIsAuthenticated } = useAuth();
-  const { saveAuthCookie, getAuthCookie } = useCookie();
+  const { saveAuthCookie } = useCookie();
 
   const navigate = useNavigate();
   const { post } = useApi();
@@ -68,7 +68,7 @@ export default function login() {
           />
         </div>
 
-        <div className="form__group form__group--page" onClick={getAuthCookie}>
+        <div className="form__group form__group--page">
           <input className="form__btn" type="submit" value="Login" />
         </div>
 

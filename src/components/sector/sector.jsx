@@ -1,16 +1,29 @@
-import React from 'react';
-import './sector.scss';
+import React, { useEffect, useState } from "react";
+import "./sector.scss";
+import { useApi } from "../../hooks/useApi";
 
-import { 
+import {
   TechBig,
   TechSmall,
   EngBig,
   EngSmall,
   HealthBig,
   HealthSmall,
-} from '../images';
+} from "../images";
 
 export default function sector() {
+  const { get } = useApi();
+
+  const fetchHomeSector = async () => {
+    await get("home-sector", {
+      onSuccess: (res) => console.log(res),
+    });
+  };
+
+  useEffect(() => {
+    fetchHomeSector();
+  }, []);
+
   return (
     <div className="sector">
       <h2>Choose your sector</h2>
