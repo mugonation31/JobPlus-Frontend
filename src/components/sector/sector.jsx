@@ -2,14 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./sector.scss";
 import { useApi } from "../../hooks/useApi";
 
-import {
-  TechBig,
-  TechSmall,
-  EngBig,
-  EngSmall,
-  HealthBig,
-  HealthSmall,
-} from "../images";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function sector() {
   const [title, setTitle] = useState("");
@@ -18,9 +11,15 @@ export default function sector() {
   const { get } = useApi();
 
   const handleSuccess = (res) => {
-    setTitle(res.data.data.attributes.title);
-    setSubTitle(res.data.data.attributes.subtitle);
-    setSectors(res.data.data.attributes.sectors.data);
+    const {
+      title,
+      subtitle,
+      sectors: { data: sectorArray },
+    } = res.data.data.attributes;
+
+    setTitle(title);
+    setSubTitle(subtitle);
+    setSectors(sectorArray);
   };
 
   const fetchHomeSector = async () => {
@@ -44,33 +43,40 @@ export default function sector() {
       <p>{subtitle}</p>
 
       <div className="sector__types">
-        {sectors.map((sector) => (
-          <div key={sector.id} className="sector__wrap">
-            <picture className="sector__picture">
-              <source srcSet={TechBig} media="(min-width: 767px)" />
-              <source srcSet={TechSmall} />
-              <img src={TechSmall} alt="" />
-            </picture>
-            <div className="sector__name">Technology</div>
-            <ul className="sector__list">
-              <li>
-                <a href="">
-                  Accountancy jobs <span>5, 757</span>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  Acturial jobs <span>5, 757</span>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  Admin, Secretarial jobs <span>5, 757</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        ))}
+        {sectors.map((sector) => {
+          const { title, bigimage, smallimage, categories } = sector.attributes;
+
+          const { url: smallimageUrl } = smallimage.data.attributes;
+          const { url: bigimageUrl } = bigimage.data.attributes;
+
+          console.log("septor", categories);
+
+          return (
+            <div key={sector.id} className="sector__wrap">
+              <picture className="sector__picture">
+                <source
+                  srcSet={`${BASE_URL}${bigimageUrl}`}
+                  media="(min-width: 767px)"
+                />
+                <source srcSet={`${BASE_URL}${smallimageUrl}`} />
+                <img src={`${BASE_URL}${smallimageUrl}`} alt="" />
+              </picture>
+              <div className="sector__name">{title}</div>
+              <ul className="sector__list">
+                {categories.data.map((category) => {
+                  return (
+                    <li key={category.id}>
+                      <a href="">
+                        {category.attributes.title}{" "}
+                        <span>{category.attributes.jobs.data.length}</span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        })}
 
         <a href="">
           <div className="sector__browse">Browse all sectors</div>
