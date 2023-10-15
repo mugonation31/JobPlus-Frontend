@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./sector.scss";
 import { useApi } from "../../hooks/useApi";
+import { Link } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -29,6 +30,7 @@ export default function sector() {
         "populate[sectors][populate][categories][populate][jobs]": true,
         "populate[sectors][populate][smallimage]": true,
         "populate[sectors][populate][bigimage]": true,
+        "populate[sectors][limit]": 3,
       },
     });
   };
@@ -49,8 +51,6 @@ export default function sector() {
           const { url: smallimageUrl } = smallimage.data.attributes;
           const { url: bigimageUrl } = bigimage.data.attributes;
 
-          console.log("septor", categories);
-
           return (
             <div key={sector.id} className="sector__wrap">
               <picture className="sector__picture">
@@ -64,12 +64,16 @@ export default function sector() {
               <div className="sector__name">{title}</div>
               <ul className="sector__list">
                 {categories.data.map((category) => {
+                  const {
+                    title,
+                    jobs: { data: jobArray },
+                  } = category.attributes;
+
                   return (
                     <li key={category.id}>
-                      <a href="">
-                        {category.attributes.title}{" "}
-                        <span>{category.attributes.jobs.data.length}</span>
-                      </a>
+                      <Link to="">
+                        {title} <span>{jobArray.length}</span>
+                      </Link>
                     </li>
                   );
                 })}
