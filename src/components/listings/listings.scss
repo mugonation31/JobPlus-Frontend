@@ -1,5 +1,6 @@
 .listing {
-  margin: 30rem 10rem;
+  //top, right, bottom, left
+  margin: 30rem 10rem 120rem 10rem;
   color: var(--gamma);
 
   &__more {
@@ -130,7 +131,7 @@
     }
   }
 
-  @include respond-to('small') {
+  @include respond-to("small") {
     display: grid;
     grid-template-columns: min-content 1fr;
   }
