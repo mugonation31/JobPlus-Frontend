@@ -32,6 +32,11 @@ export default function listings() {
   useEffect(() => {
     fetchJobs();
   }, []);
+
+  const handlePageChange = (pageNumber) => {
+    fetchJobs(pageNumber);
+  };
+
   console.log(jobs);
   return (
     <section>
@@ -69,7 +74,7 @@ export default function listings() {
           </a>
         </div>
       ))}
-      <Paginate />
+      <Paginate meta={meta.paginate} onPageChange={handlePageChange} />
     </section>
   );
 }
