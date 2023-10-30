@@ -37,11 +37,14 @@ export default function listings() {
     fetchJobs(pageNumber);
   };
 
-  console.log(jobs);
+  const total = meta?.paginate?.totalPages;
+
+  console.log(Array.from({ length: total }));
+
   return (
     <section>
-      {jobs.map((job, index) => (
-        <div key={index} className="listing__card">
+      {jobs.map((job) => (
+        <div key={job.id} className="listing__card">
           <header className="listing__header">
             <h1 className="listing__title">{job.title}</h1>
             <img className="listing__saved" src={StarSaved} alt="" />
