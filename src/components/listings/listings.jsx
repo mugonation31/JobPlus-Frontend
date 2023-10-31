@@ -39,8 +39,6 @@ export default function listings() {
 
   const total = meta?.paginate?.totalPages;
 
-  console.log(Array.from({ length: total }));
-
   return (
     <section>
       {jobs.map((job) => (

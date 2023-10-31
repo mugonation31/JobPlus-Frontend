@@ -9,4 +9,15 @@
     cursor: none;
     pointer-events: none;
   }
+
+  .page-numbers {
+    display: flex;
+    gap: 10rem;
+  }
+
+  li.active {
+    border: 2px solid var(--beta);
+    padding: 0rem 5rem;
+    cursor: pointer;
+  }
 }
