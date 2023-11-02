@@ -37,8 +37,6 @@ export default function listings() {
     fetchJobs(pageNumber);
   };
 
-  const total = meta?.paginate?.totalPages;
-
   return (
     <section>
       {jobs.map((job) => (
