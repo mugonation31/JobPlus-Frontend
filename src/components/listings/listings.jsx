@@ -3,8 +3,10 @@ import "./listings.scss";
 import Paginate from "../paginate/paginate";
 import { StarSaved, Money, Location, Timer } from "../images";
 import { useApi } from "../../hooks/useApi";
+import { Fragment } from "react";
 
 const MAX_PER_PAGE = 3;
+const MAX_CHAR_LENGTH = 200;
 
 export default function listings() {
   const [jobs, setJobs] = useState([]);
@@ -14,7 +16,14 @@ export default function listings() {
 
   const handleSuccess = (res) => {
     const { entries, meta } = res.data;
-    setJobs(entries);
+
+    // update each job to include isTruncated (is shorter)
+    const updatedJobs = entries.map((job) => ({
+      ...job,
+      isTruncated: true,
+    }));
+
+    setJobs(updatedJobs);
     setMeta(meta);
   };
 
@@ -23,10 +32,19 @@ export default function listings() {
       onSuccess: (res) => handleSuccess(res),
       params: {
         "populate[company]": true,
+        "populate[job_types]": true,
         start: (page - 1) * MAX_PER_PAGE,
         limit: MAX_PER_PAGE,
       },
     });
+  };
+
+  const truncate = (text) => {
+    const shouldTruncate = text.length > MAX_CHAR_LENGTH;
+    if (!shouldTruncate) return text;
+    const truncated = text.slice(0, MAX_CHAR_LENGTH);
+    // return elipsis if text is truncated
+    return truncated + "...";
   };
 
   useEffect(() => {
@@ -52,20 +70,25 @@ export default function listings() {
           <ul className="listing__items">
             <li>
               <img src={Money} alt="" />
-              <b>Salary negotiable</b>
+              <b>Salary {job.SalaryType}</b>
             </li>
             <li>
               <img src={Location} alt="" />
-              Heyes, <b>Uxbridge</b>
+              <b>{job.location}</b>
             </li>
             <li>
               <img src={Timer} alt="" />
-              Contract, full-time
+              {job.job_types.map((type, index, array) => (
+                <Fragment key={type.id}>
+                  <span>{type.title}</span>
+                  {index !== array.length - 1 && <span>,</span>}
+                </Fragment>
+              ))}
             </li>
           </ul>
 
           <p className="listing__detail">
-            {job.description} <b>Read more...</b>
+            {truncate(job.description)} <b>Read more</b>
           </p>
 
           <a href="" className="listing__cta">
