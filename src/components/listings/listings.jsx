@@ -39,13 +39,18 @@ export default function listings() {
     });
   };
 
-  const truncate = (text) => {
-    const shouldTruncate = text.length > MAX_CHAR_LENGTH;
+  const truncate = (text, jobId) => {
+    const job = jobs.find((job) => job.id === jobId);
+
+    const shouldTruncate = text.length > MAX_CHAR_LENGTH && job?.isTruncated;
     if (!shouldTruncate) return text;
+
     const truncated = text.slice(0, MAX_CHAR_LENGTH);
     // return elipsis if text is truncated
     return truncated + "...";
   };
+
+  const toggleTruncate = () => {};
 
   useEffect(() => {
     fetchJobs();
@@ -88,7 +93,7 @@ export default function listings() {
           </ul>
 
           <p className="listing__detail">
-            {truncate(job.description)} <b>Read more</b>
+            {truncate(job.description, job.id)} <b>Read more</b>
           </p>
 
           <a href="" className="listing__cta">
