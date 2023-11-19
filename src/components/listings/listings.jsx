@@ -50,7 +50,17 @@ export default function listings() {
     return truncated + "...";
   };
 
-  const toggleTruncate = () => {};
+  const toggleTruncate = (jobId) => {
+    const updatedJobs = jobs.map((job) => {
+      if (job.id === jobId) {
+        return { ...job, isTruncated: !job.isTruncated };
+      }
+
+      return job;
+    });
+
+    setJobs(updatedJobs);
+  };
 
   useEffect(() => {
     fetchJobs();
@@ -71,7 +81,6 @@ export default function listings() {
               Posted by <span>{job.company.name}</span>
             </p>
           </header>
-
           <ul className="listing__items">
             <li>
               <img src={Money} alt="" />
@@ -93,7 +102,10 @@ export default function listings() {
           </ul>
 
           <p className="listing__detail">
-            {truncate(job.description, job.id)} <b>Read more</b>
+            {truncate(job.description, job.id)}
+            <a onClick={() => toggleTruncate(job.id)}>
+              <b>{job.isTruncated ? "Read more" : "Read less"}</b>
+            </a>
           </p>
 
           <a href="" className="listing__cta">
