@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./listings.scss";
 import Paginate from "../paginate/paginate";
-import { StarSaved, Money, Location, Timer } from "../images";
+import { StarSaved, StarUnSaved, Money, Location, Timer } from "../images";
 import { useApi } from "../../hooks/useApi";
 import { Fragment } from "react";
 
@@ -76,7 +76,7 @@ export default function listings() {
         <div key={job.id} className="listing__card">
           <header className="listing__header">
             <h1 className="listing__title">{job.title}</h1>
-            <img className="listing__saved" src={StarSaved} alt="" />
+            <img className="listing__saved" src={StarUnSaved} alt="" />
             <p className="listing__company">
               Posted by <span>{job.company.name}</span>
             </p>
