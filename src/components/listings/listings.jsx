@@ -4,6 +4,9 @@ import Paginate from "../paginate/paginate";
 import { StarSaved, StarUnSaved, Money, Location, Timer } from "../images";
 import { useApi } from "../../hooks/useApi";
 import { Fragment } from "react";
+import ConfirmationModal from "../confirmation_modal/confirmation_modal";
+
+console.log(ConfirmationModal);
 
 const MAX_PER_PAGE = 3;
 const MAX_CHAR_LENGTH = 200;
@@ -71,49 +74,57 @@ export default function listings() {
   };
 
   return (
-    <section>
-      {jobs.map((job) => (
-        <div key={job.id} className="listing__card">
-          <header className="listing__header">
-            <h1 className="listing__title">{job.title}</h1>
-            <img className="listing__saved" src={StarUnSaved} alt="" />
-            <p className="listing__company">
-              Posted by <span>{job.company.name}</span>
+    <>
+      <ConfirmationModal
+        isOpen={true}
+        onClose={() => {}}
+        onAccept={() => {}}
+        text="You are about to save this job. Are you sure?"
+      />
+      <section>
+        {jobs.map((job) => (
+          <div key={job.id} className="listing__card">
+            <header className="listing__header">
+              <h1 className="listing__title">{job.title}</h1>
+              <img className="listing__saved" src={StarUnSaved} alt="" />
+              <p className="listing__company">
+                Posted by <span>{job.company.name}</span>
+              </p>
+            </header>
+            <ul className="listing__items">
+              <li>
+                <img src={Money} alt="" />
+                <b>Salary {job.SalaryType}</b>
+              </li>
+              <li>
+                <img src={Location} alt="" />
+                <b>{job.location}</b>
+              </li>
+              <li>
+                <img src={Timer} alt="" />
+                {job.job_types.map((type, index, array) => (
+                  <Fragment key={type.id}>
+                    <span>{type.title}</span>
+                    {index !== array.length - 1 && <span>,</span>}
+                  </Fragment>
+                ))}
+              </li>
+            </ul>
+
+            <p className="listing__detail">
+              {truncate(job.description, job.id)}
+              <a onClick={() => toggleTruncate(job.id)}>
+                <b>{job.isTruncated ? "Read more" : "Read less"}</b>
+              </a>
             </p>
-          </header>
-          <ul className="listing__items">
-            <li>
-              <img src={Money} alt="" />
-              <b>Salary {job.SalaryType}</b>
-            </li>
-            <li>
-              <img src={Location} alt="" />
-              <b>{job.location}</b>
-            </li>
-            <li>
-              <img src={Timer} alt="" />
-              {job.job_types.map((type, index, array) => (
-                <Fragment key={type.id}>
-                  <span>{type.title}</span>
-                  {index !== array.length - 1 && <span>,</span>}
-                </Fragment>
-              ))}
-            </li>
-          </ul>
 
-          <p className="listing__detail">
-            {truncate(job.description, job.id)}
-            <a onClick={() => toggleTruncate(job.id)}>
-              <b>{job.isTruncated ? "Read more" : "Read less"}</b>
+            <a href="" className="listing__cta">
+              Withdraw application
             </a>
-          </p>
-
-          <a href="" className="listing__cta">
-            Withdraw application
-          </a>
-        </div>
-      ))}
-      <Paginate meta={meta.paginate} onPageChange={handlePageChange} />
-    </section>
+          </div>
+        ))}
+        <Paginate meta={meta.paginate} onPageChange={handlePageChange} />
+      </section>
+    </>
   );
 }
