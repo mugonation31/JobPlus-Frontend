@@ -6,14 +6,14 @@ import { useApi } from "../../hooks/useApi";
 import { Fragment } from "react";
 import ConfirmationModal from "../confirmation_modal/confirmation_modal";
 
-console.log(ConfirmationModal);
-
 const MAX_PER_PAGE = 3;
 const MAX_CHAR_LENGTH = 200;
 
 export default function listings() {
   const [jobs, setJobs] = useState([]);
   const [meta, setMeta] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [jobToSave, setJobToSave] = useState(null);
 
   const { get } = useApi();
 
@@ -69,6 +69,20 @@ export default function listings() {
     fetchJobs();
   }, []);
 
+  const showModal = (job) => {
+    setJobToSave(job);
+    setIsModalOpen(true);
+  };
+
+  const hideModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const acceptModal = () => {
+    console.log("this is saving the job:", jobToSave);
+    hideModal();
+  };
+
   const handlePageChange = (pageNumber) => {
     fetchJobs(pageNumber);
   };
@@ -76,9 +90,9 @@ export default function listings() {
   return (
     <>
       <ConfirmationModal
-        isOpen={true}
-        onClose={() => {}}
-        onAccept={() => {}}
+        isOpen={isModalOpen}
+        onClose={hideModal}
+        onAccept={acceptModal}
         text="You are about to save this job. Are you sure?"
       />
       <section>
@@ -86,7 +100,12 @@ export default function listings() {
           <div key={job.id} className="listing__card">
             <header className="listing__header">
               <h1 className="listing__title">{job.title}</h1>
-              <img className="listing__saved" src={StarUnSaved} alt="" />
+              <img
+                className="listing__saved"
+                src={StarUnSaved}
+                alt="star"
+                onClick={() => showModal(job)}
+              />
               <p className="listing__company">
                 Posted by <span>{job.company.name}</span>
               </p>
