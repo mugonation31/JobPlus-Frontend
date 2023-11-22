@@ -103,6 +103,7 @@ export default function listings() {
               <img
                 className="listing__saved"
                 src={StarUnSaved}
+                style={{ cursor: "pointer" }}
                 alt="star"
                 onClick={() => showModal(job)}
               />

@@ -91,6 +91,17 @@ export default function register() {
         </div>
 
         <div className="form__group form__group--page">
+          <label className="form__label">Phone Number</label>
+          <input
+            className="form__field"
+            type="text"
+            placeholder="Enter phone number"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+        </div>
+
+        <div className="form__group form__group--page">
           <label className="form__label">Email</label>
           <input
             className="form__field"
