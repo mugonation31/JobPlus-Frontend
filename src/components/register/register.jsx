@@ -3,6 +3,8 @@ import "../styles/form.scss";
 import { Link } from "react-router-dom";
 import Alert from "../alert/alert";
 import { useApi } from "../../hooks/useApi";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 export default function register() {
   const [firstName, setFirstName] = useState("");
@@ -10,7 +12,7 @@ export default function register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const [phoneNumber, setPhoneNumber] = useState("");
   //error messages
   const [alert, setAlert] = useState({});
   const { post } = useApi();
@@ -92,12 +94,12 @@ export default function register() {
 
         <div className="form__group form__group--page">
           <label className="form__label">Phone Number</label>
-          <input
-            className="form__field"
-            type="text"
+          <PhoneInput
+            className="PhoneInput"
             placeholder="Enter phone number"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            value={phoneNumber}
+            onChange={setPhoneNumber}
+            limitMaxLength={true}
           />
         </div>
 
