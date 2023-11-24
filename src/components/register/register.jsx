@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/form.scss";
 import { Link } from "react-router-dom";
 import Alert from "../alert/alert";
 import { useApi } from "../../hooks/useApi";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import axios from "axios";
 
 export default function register() {
   const [firstName, setFirstName] = useState("");
@@ -13,6 +14,7 @@ export default function register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [country, setCountry] = useState();
   //error messages
   const [alert, setAlert] = useState({});
   const { post } = useApi();
@@ -31,6 +33,7 @@ export default function register() {
     //Reset our state
     setFirstName("");
     setLastName("");
+    setPhoneNumber();
     setEmail("");
     setPassword("");
     setConfirmPassword("");
@@ -51,19 +54,39 @@ export default function register() {
     const data = {
       firstName,
       lastName,
+      phoneNumber,
       email,
       username: email,
       password,
       confirmPassword,
     };
 
+    const handleError = () => {
+      setAlert();
+    };
+
     await post("auth/local/register", {
       data: data,
       onSuccess: (res) => handleSuccess(),
-      onFailure: (err) => setAlert(err),
+      onFailure: (err) => handleError(err),
     });
     console.log("error", err);
   };
+
+  const getUserLocation = async () => {
+    try {
+      const response = await axios.get("https://ipapi.co/json/");
+      setCountry(response?.data?.country_code);
+    } catch (e) {
+      console.error;
+    }
+  };
+
+  useEffect(() => {
+    getUserLocation();
+  }, [country]);
+
+  console.log(country);
 
   return (
     <>
@@ -100,6 +123,7 @@ export default function register() {
             value={phoneNumber}
             onChange={setPhoneNumber}
             limitMaxLength={true}
+            defaultCountry={country}
           />
         </div>
 
