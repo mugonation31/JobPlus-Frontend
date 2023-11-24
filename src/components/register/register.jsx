@@ -61,8 +61,8 @@ export default function register() {
       confirmPassword,
     };
 
-    const handleError = () => {
-      setAlert();
+    const handleError = (err) => {
+      setAlert(err);
     };
 
     await post("auth/local/register", {
