@@ -4,16 +4,15 @@ const authServices = () => {
   const { post } = useApi();
 
   //registerUser method
-  const registerUser = async (userData, onSuccess, onFailure) => {
+  const registerUser = async (credentials, onSuccess, onFailure) => {
     await post("auth/local/register", {
-      data: userData,
+      data: credentials,
       onSuccess: onSuccess,
       onFailure: onFailure,
     });
   };
 
   //loginUser method
-
   const loginUser = async (userData, onSuccess, onFailure) => {
     await post("auth/local", {
       data: userData,
@@ -22,9 +21,19 @@ const authServices = () => {
     });
   };
 
+  //forgotUserPassword method
+  const forgotUserPassword = async (identifier, onSuccess, onFailure) => {
+    await post("auth/forgot-password", {
+      data: identifier,
+      onSuccess: onSuccess,
+      onFailure: onFailure,
+    });
+  };
+
   return {
     registerUser,
     loginUser,
+    forgotUserPassword,
   };
 };
 

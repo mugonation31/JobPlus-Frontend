@@ -33,7 +33,7 @@ export default function login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = {
+    const credentials = {
       identifier,
       password,
     };
@@ -42,7 +42,7 @@ export default function login() {
       setAlert(err);
     };
 
-    await loginUser(data, handleSuccess, handleError);
+    await loginUser(credentials, handleSuccess, handleError);
   };
 
   return (
