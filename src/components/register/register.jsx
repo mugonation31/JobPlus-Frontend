@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import "../styles/form.scss";
 import { Link } from "react-router-dom";
 import Alert from "../alert/alert";
-import { useApi } from "../../hooks/useApi";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import authServices from "../../services/AuthServices";
 import axios from "axios";
 
 export default function register() {
@@ -17,7 +17,8 @@ export default function register() {
   const [country, setCountry] = useState();
   //error messages
   const [alert, setAlert] = useState({});
-  const { post } = useApi();
+
+  const { registerUser } = authServices();
 
   const validateConfirmPassword = (password, confirmPassword) => {
     if (password !== confirmPassword) {
@@ -65,12 +66,7 @@ export default function register() {
       setAlert(err);
     };
 
-    await post("auth/local/register", {
-      data: data,
-      onSuccess: (res) => handleSuccess(),
-      onFailure: (err) => handleError(err),
-    });
-    console.log("error", err);
+    await registerUser(data, handleSuccess, handleError);
   };
 
   const getUserLocation = async () => {
@@ -85,8 +81,6 @@ export default function register() {
   useEffect(() => {
     getUserLocation();
   }, [country]);
-
-  console.log(country);
 
   return (
     <>
