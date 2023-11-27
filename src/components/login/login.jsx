@@ -3,10 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "../styles/form.scss";
 import Alert from "../alert/alert";
-import cookie from "js-cookie";
-import { useApi } from "../../hooks/useApi";
 import { useCookie } from "../../hooks/useCookie";
 import { useAuth } from "../../contexts/AuthContext";
+import authServices from "../../services/AuthServices";
 
 export default function login() {
   const [identifier, setIdentifier] = useState("");
@@ -15,9 +14,9 @@ export default function login() {
 
   const { setIsAuthenticated } = useAuth();
   const { saveAuthCookie } = useCookie();
+  const { loginUser } = authServices();
 
   const navigate = useNavigate();
-  const { post } = useApi();
 
   const handleSuccess = (res) => {
     // set the jwt in a cookie
@@ -34,11 +33,16 @@ export default function login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await post("auth/local", {
-      data: { identifier, password },
-      onSuccess: (res) => handleSuccess(res),
-      onFailure: (err) => setAlert(err),
-    });
+    const data = {
+      identifier,
+      password,
+    };
+
+    const handleError = (err) => {
+      setAlert(err);
+    };
+
+    await loginUser(data, handleSuccess, handleError);
   };
 
   return (
