@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./sector.scss";
-import { useApi } from "../../hooks/useApi";
 import { Link } from "react-router-dom";
+import sectorService from "../../services/SectorService";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -9,7 +9,8 @@ export default function sector() {
   const [title, setTitle] = useState("");
   const [subtitle, setSubTitle] = useState("");
   const [sectors, setSectors] = useState([]);
-  const { get } = useApi();
+
+  const { fetchHomeSector } = sectorService();
 
   const handleSuccess = (res) => {
     const {
@@ -23,20 +24,8 @@ export default function sector() {
     setSectors(sectorArray);
   };
 
-  const fetchHomeSector = async () => {
-    await get("home-sector", {
-      onSuccess: (res) => handleSuccess(res),
-      params: {
-        "populate[sectors][populate][categories][populate][jobs]": true,
-        "populate[sectors][populate][smallimage]": true,
-        "populate[sectors][populate][bigimage]": true,
-        "populate[sectors][limit]": 3,
-      },
-    });
-  };
-
   useEffect(() => {
-    fetchHomeSector();
+    fetchHomeSector(handleSuccess);
   }, []);
 
   return (
