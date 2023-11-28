@@ -30,10 +30,26 @@ const authServices = () => {
     });
   };
 
+  //resetUserPassword method
+  const resetUserPassword = async (
+    password,
+    passwordConfirmation,
+    code,
+    onSuccess,
+    onFailure
+  ) => {
+    await post("auth/reset-password", {
+      data: { password, passwordConfirmation, code },
+      onSuccess: onSuccess,
+      onFailure: onFailure,
+    });
+  };
+
   return {
     registerUser,
     loginUser,
     forgotUserPassword,
+    resetUserPassword,
   };
 };
 

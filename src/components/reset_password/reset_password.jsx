@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/form.scss";
 import Alert from "../alert/alert";
-import { useApi } from "../../hooks/useApi";
+import authServices from "../../services/AuthServices";
 
 export default function reset_password() {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [alert, setAlert] = useState("");
 
-  const { post } = useApi();
+  const { resetUserPassword } = authServices();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,17 +29,17 @@ export default function reset_password() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = {
+    const handleError = (err) => {
+      setAlert(err);
+    };
+
+    await resetUserPassword(
       password,
       passwordConfirmation,
       code,
-    };
-
-    await post("auth/reset-password", {
-      data: data,
-      onSuccess: (res) => handleSuccess(),
-      onFailure: (err) => setAlert(err),
-    });
+      handleSuccess,
+      handleError
+    );
   };
 
   return (
